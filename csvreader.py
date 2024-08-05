@@ -46,7 +46,7 @@ with open('games.csv','r') as csvfile:
         x.append(date)
         y.append(int(row[2]))
          
-plt.figure(figsize=(12, 6))   
+plt.figure(figsize=(12, 8))   
 plt.plot(x, y, color = 'g',linestyle = 'dashed', 
          marker = 'o', label = "Games") 
 plt.xlabel('Month') 
@@ -54,6 +54,7 @@ plt.ylabel('Games')
 plt.title('Number of games per month') 
 plt.legend()
 plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
 
 plt.savefig('games_per_month.png', format='png')
 plt.show() 
