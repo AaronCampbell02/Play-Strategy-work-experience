@@ -2,6 +2,7 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import date
+import numpy as np
 
 x= []
 y =[]
@@ -20,16 +21,22 @@ with open('games.csv','r') as csvfile:
         year = int(row[0])
 
         date_time_value = mdates.date2num(date(year,month,1))
+        date_time_num = mdates.date2num(date_time_value)
         formatter = mdates.ConciseDateFormatter(date_time_value)
 
         x.append(date_time_value)
         y.append(int(row[2]))
-         
 
+x1 = np.array(x)
+y1 = np.array(y)
+
+coefficients = np.polyfit(x1, y1, 1)
+function = np.poly1d(coefficients)
+trend_line = function(x1)
          
 plt.figure(figsize=(12, 8))   
-plt.plot(x, y, color = 'g',linestyle = 'dashed', 
-         marker = 'o', label = "Games")
+plt.scatter(x, y, color='g', label='Games')
+plt.plot(x, trend_line, linestyle='--', color='g', label='Trend Line')
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
 plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval = 3)) 
 plt.xlabel('Month') 
