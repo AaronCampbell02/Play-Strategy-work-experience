@@ -27,12 +27,12 @@ with open('games.csv','r') as csvfile:
         x.append(date_time_value)
         y.append(int(row[2]))
 
-x1 = np.array(x)
-y1 = np.array(y)
+x0 = np.array(x)
+y0 = np.array(y)
 
-coefficients = np.polyfit(x1, y1, 1)
+coefficients = np.polyfit(x0, y0, 1)
 function = np.poly1d(coefficients)
-trend_line = function(x1)
+trend_line = function(x0)
          
 plt.figure(figsize=(12, 8))   
 plt.scatter(x, y, color='g', label='Games')
