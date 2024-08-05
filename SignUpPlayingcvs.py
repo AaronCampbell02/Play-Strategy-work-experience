@@ -56,22 +56,20 @@ with open('users.csv','r') as csvfile:
 
         x.append(date_time_value)
         y1.append(int(row[2]))
-        y2.append(int(row[4]))
-        y3.append(int(row[3]))
+        y4.append(int(row[5]))
          
 plt.figure(figsize=(12, 8))   
-plt.bar(x, y1, color = 'y', width = 30, label = "Total User Sign ups")
-plt.bar(x, y2, color = 'g', width = 30, label = "Enabled User Sign ups")
-plt.bar(x, y3, color = 'r', width = 30, label = "Bad/Bot Sign ups") 
+plt.bar(x, y1, color = 'r', width = 30, label = "Total User Sign ups")
+plt.bar(x, y4, color = 'b', width = 30, label = "Accounts with games played")    
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
 plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval = 3)) 
 plt.xlabel('Month') 
-plt.ylabel('User Sign ups') 
-plt.title('User Base details') 
+plt.ylabel('Sign ups') 
+plt.title('User sign up proportions') 
 plt.legend()
 plt.tight_layout()
 
-plt.savefig('sign_ups_per_month.png', format='png')
+plt.savefig('sign_ups_proportion.png', format='png')
 plt.show() 
 
     
