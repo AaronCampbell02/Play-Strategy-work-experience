@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import csv
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -9,6 +11,21 @@ y1 =[]
 y2 = []
 y3 = []
 y4 = []
+
+months = {
+    'January': 1,
+    'February': 2,
+    'March': 3,
+    'April': 4,
+    'May': 5,
+    'June': 6,
+    'July': 7,
+    'August': 8,
+    'September': 9,
+    'October': 10,
+    'November': 11,
+    'December': 12
+}
 
 with open('users.csv','r') as csvfile: 
     plots = csv.reader(csvfile, delimiter = ',') 
@@ -25,32 +42,21 @@ with open('users.csv','r') as csvfile:
 
         month = month.lstrip()
 
-        months = {
-        'January': 1,
-        'February': 2,
-        'March': 3,
-        'April': 4,
-        'May': 5,
-        'June': 6,
-        'July': 7,
-        'August': 8,
-        'September': 9,
-        'October': 10,
-        'November': 11,
-        'December': 12
-        }
+        # month_num = months[month]
+        month_num = months.get(month, 0)
 
-        month_num = months[month]
+        if(month_num != 0):
+            date_time_value = mdates.date2num(date(year,month_num,1))
+            date_time_num = mdates.date2num(date_time_value)
+            formatter = mdates.ConciseDateFormatter(date_time_value)
 
-        date_time_value = mdates.date2num(date(year,month_num,1))
-        date_time_num = mdates.date2num(date_time_value)
-        formatter = mdates.ConciseDateFormatter(date_time_value)
+            x.append(date_time_value)
+            y1.append(int(row[2]))
+            y2.append(int(row[4]))
+            y3.append(int(row[3]))
+            y4.append(int(row[5]))
 
-        x.append(date_time_value)
-        y1.append(int(row[2]))
-        y2.append(int(row[4]))
-        y3.append(int(row[3]))
-        y4.append(int(row[5]))
+
          
 plt.figure(figsize=(12, 8))   
 plt.bar(x, y1, color='b', width=30, label='Total User Sign ups')
