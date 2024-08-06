@@ -25,30 +25,22 @@ with open('users.csv','r') as csvfile:
 
         month = month.lstrip()
 
-        if month == "January":
-            month_num = 1
-        elif month == "February":
-            month_num = 2
-        elif month == "March":
-            month_num = 3
-        elif month == "April":
-            month_num = 4
-        elif month == "May":
-            month_num = 5
-        elif month == "June":
-            month_num = 6
-        elif month == "July":
-            month_num = 7
-        elif month == "August":
-            month_num = 8
-        elif month == "September":
-            month_num = 9
-        elif month == "October":
-            month_num = 10
-        elif month == "November":
-            month_num = 11
-        elif month == "December":
-            month_num = 12
+        months = {
+        'January': 1,
+        'February': 2,
+        'March': 3,
+        'April': 4,
+        'May': 5,
+        'June': 6,
+        'July': 7,
+        'August': 8,
+        'September': 9,
+        'October': 10,
+        'November': 11,
+        'December': 12
+        }
+
+        month_num = months[month]
 
         date_time_value = mdates.date2num(date(year,month_num,1))
         date_time_num = mdates.date2num(date_time_value)
