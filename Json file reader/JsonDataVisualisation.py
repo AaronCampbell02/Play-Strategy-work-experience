@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import json
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -262,12 +264,100 @@ def userGames():
 
     plt.xlabel('Months')
     plt.ylabel('Count')
-    plt.title('Total Games')
+    plt.title('Games Per Month')
     plt.legend()
     plt.tight_layout()
     plt.savefig('gamesTrends.png', format='png')
     plt.show()
 
+def playerAdvantage():
+    win = 0
+    draw = 0
+    lose = 0
+    incomplete = 0
+
+    win1 = 0
+    draw1 = 0
+    lose1 = 0
+    incomplete1 = 0
+
+    for item in data:
+        drawB = False
+        incompleteB = False
+        try:
+            status = item['s']
+            if status == 34 or status == 32:
+                draw += 1
+                drawB = True
+            elif status == 39 or status == 10 or status == 20 or status == 25 or status == 37:
+                incomplete += 1
+                incompleteB = True
+            else:
+                try:
+                    wID = item['wid']
+                except:
+                    incomplete += 1
+                    incompleteB = True
+                PlayersID = item['us']
+                p1 = PlayersID[0]
+                if(p1 == wID):
+                    win += 1
+                else:
+                    lose += 1
+            try:
+                p1Elo = item['p0']['e']
+            except:
+                print("no elo value")
+                p1Elo = 1500
+            try:
+                p2Elo = item['p1']['e']
+            except:
+                print("no elo value")
+                p2Elo = 1500
+            if(incompleteB == True):
+                incomplete1 += 1
+            elif(draw == True):
+                draw1 += 1
+            elif(p1Elo > p2Elo):
+                higherElo = "player1"
+            elif(p1Elo < p2Elo):
+                higherElo = "player2"
+            else:
+                higherElo = "equal"
+            if(p1 == wID and higherElo == "player1"):
+                win1 += 1
+            elif(p1 != wID and higherElo == "player2"):
+                win1 += 1
+            elif(higherElo == "equal"):
+                higherElo = "equal"
+                #no action as equal elo
+            else:
+                lose1 += 1
+            
+        except:
+            print("invalid data value")
+    colours = ['g','y','r','black']
+    results = [win,draw,lose,incomplete]
+    plt.figure(figsize=(12, 8))
+    plt.bar(["Win","Draw","Lose","incomplete"], results, color = colours, width = .5)
+    plt.xlabel('Results')
+    plt.ylabel('Count')
+    plt.title('P1 peformance against P2')
+    plt.tight_layout()
+    plt.savefig('P1VP2.png', format='png')
+    plt.show()
+
+    colours = ['g','y','r','black']
+    results = [win1,draw1,lose1,incomplete1]
+    print(results)
+    plt.figure(figsize=(12, 8))
+    plt.bar(["Win","Draw","Lose","incomplete"], results, color = colours, width = .5)
+    plt.xlabel('Results')
+    plt.ylabel('Count')
+    plt.title('Does higher Elo peform better')
+    plt.tight_layout()
+    plt.savefig('HigherEloPeformance.png', format='png')
+    plt.show()
 
 with open('games_dev_2024_08_01.json', 'r') as file:
     data = json.load(file)
@@ -280,7 +370,6 @@ with open('games_dev_2024_08_01.json', 'r') as file:
                 userGames()
             case 3:
                 playerAdvantage()
-                eloAdvantage()
             case 4:
                 averageMoves()
             case 5:
