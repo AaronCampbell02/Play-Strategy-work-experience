@@ -114,12 +114,8 @@ def variantGames():
         "Grand Othello",
         "Amazons",
         "Breakthrough",
-        "Mini Breakthrough"
-    ]
-    lib3_games = [
-        "Oware"
-    ]
-    lib4_games = [
+        "Mini Breakthrough",
+        "Oware",
         "Togyzkumalak"
     ]
     lib5_games = [
@@ -135,9 +131,7 @@ def variantGames():
     
     x0 = [0] * 15
     x1 = [0] * 11
-    x2 = [0] * 9
-    x3 = [0]
-    x4 = [0]
+    x2 = [0] * 11
     x5 = [0] * 3
     x6 = [0] * 2
     for item in data:
@@ -152,8 +146,26 @@ def variantGames():
                 case 0:
                     i = lib0_games.index(game)
                     x0[i] += 1
+                case 1:
+                    i = lib1_games.index(game)
+                    x1[i] += 1
+                case 2:
+                    i = lib2_games.index(game)
+                    x2[i] += 1
+                case 3:
+                    i = lib2_games.index(game)
+                    x2[i] += 1
+                case 4:
+                    i = lib2_games.index(game)
+                    x2[i] += 1
+                case 5:
+                    i = lib5_games.index(game)
+                    x5[i] += 1
+                case 6:
+                    i = lib6_games.index(game)
+                    x6[i] += 1
                 case _:
-                    print("hi")
+                    print("invalid value")
         except:
             print("error in data")
     plt.figure(figsize=(18, 10))
@@ -163,7 +175,47 @@ def variantGames():
     plt.title('Chess variants')
     plt.legend()
     plt.tight_layout()
-    plt.savefig('VariantGames.png', format='png')
+    plt.savefig('ChessGames.png', format='png')
+    plt.show()
+
+    plt.figure(figsize=(18, 10))
+    plt.bar(lib1_games, x1, color = 'r', width = 0.5, label = "Draughts Variants")
+    plt.xlabel('Draughts variants')
+    plt.ylabel('Count')
+    plt.title('Draughts variants')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig('DraughtsGames.png', format='png')
+    plt.show()
+
+    plt.figure(figsize=(18, 10))
+    plt.bar(lib2_games, x2, color = 'r', width = 0.5, label = "Abstract Variants")
+    plt.xlabel('Abstract variants')
+    plt.ylabel('Count')
+    plt.title('Abstract variants')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig('AbstractGames.png', format='png')
+    plt.show()
+
+    plt.figure(figsize=(18, 10))
+    plt.bar(lib5_games, x5, color = 'r', label = "Go Variants")
+    plt.xlabel('Go variants')
+    plt.ylabel('Count')
+    plt.title('Go variants')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig('goGames.png', format='png')
+    plt.show()
+
+    plt.figure(figsize=(18, 10))
+    plt.bar(lib6_games, x6, color = 'r', width = 0.5, label = "Gammon Variants")
+    plt.xlabel('Gammon variants')
+    plt.ylabel('Count')
+    plt.title('Gammon variants')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig('gammonGames.png', format='png')
     plt.show()
 
 def parse_date(date_str):
