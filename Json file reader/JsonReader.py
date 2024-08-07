@@ -31,9 +31,6 @@ status_array = [
 
 x = [0]*len(status_array) 
 
-def parse_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%fZ')
-
 with open('games_dev_2024_08_01.json', 'r') as file:
     data = json.load(file)
 

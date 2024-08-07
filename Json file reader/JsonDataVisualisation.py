@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import numpy as np
 
 status_array = [
     ["Created", 10],
@@ -218,8 +220,54 @@ def variantGames():
     plt.savefig('gammonGames.png', format='png')
     plt.show()
 
-def parse_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+def userGames():
+    x = [0]
+    y = []
+    count = 0
+    dates = len(data)
+    lastMonth = "null"
+    for item in data:
+        try:
+            date = item["ca"]["$date"]
+            date = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
+            x[count] += 1
+
+            if (lastMonth != "null" and lastMonth != date.month):
+                formatter = mdates.ConciseDateFormatter(lastDate)
+                y.append(lastDate)
+                count += 1
+                x.append(0)
+
+            date_time_num = mdates.date2num(date)
+            lastMonth = date.month
+            lastDate = date_time_num
+
+        except:
+            print("invalid data value")
+
+    y.append(lastDate)
+
+    x0 = np.array(x)
+    y0 = np.array(y)
+
+    coefficients = np.polyfit(y0, x0, 1)
+    function = np.poly1d(coefficients)
+    trend_line = function(y0)
+    
+    plt.figure(figsize=(12, 8))
+    plt.scatter(y,x , color='g', label='Games')
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval = 3)) 
+    plt.plot(y0, trend_line, linestyle='--', color='g', label='Trend Line')
+
+    plt.xlabel('Months')
+    plt.ylabel('Count')
+    plt.title('Total Games')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig('gamesTrends.png', format='png')
+    plt.show()
+
 
 with open('games_dev_2024_08_01.json', 'r') as file:
     data = json.load(file)
