@@ -91,7 +91,7 @@ def variantGames():
     x6 = [0] * len(lib6_games)
     for item in data:
         try:
-            lib = item['l']
+            lib = item.get('l',1)
             var = item.get('v',1)
             game = GAMES[lib,var]
             match(lib):
@@ -121,44 +121,15 @@ def variantGames():
         except:
             print("error in data")
 
-    figX = 16
-    figY = 8
-    colours = ['red']
-    results = x0
-    x = lib0_games
-    title = 'Chess variants'
-    fileName = 'ChessGames.png'
-    xAxis = title
-    drawBar(figX,figY,colours,results,title,xAxis,fileName,x)
+    drawBar(16,8,'r',x0,'Chess Variants','Chess Variants','chessGames.png',lib0_games)
 
-    results = x1
-    x = lib1_games
-    title = 'Draughts variants'
-    fileName = 'DraughtsGames.png'
-    xAxis = title
-    drawBar(figX,figY,colours,results,title,xAxis,fileName,x)
+    drawBar(16,8,'r',x1,'Draughts Variants','Draughts Variants','draughtsGames.png',lib1_games)
 
-    results = x2
-    x = lib2_games
-    title = 'Abstract Variants'
-    fileName = 'AbstractGames.png'
-    xAxis = title
-    drawBar(figX,figY,colours,results,title,xAxis,fileName,x)
+    drawBar(16,8,'r',x2,'Abstract Variants','Abstract Variants','AbstractGames.png',lib2_games)
 
-    figX = 12
-    results = x5
-    x = lib5_games
-    title = 'Go Variants'
-    fileName = 'goGames.png'
-    xAxis = title
-    drawBar(figX,figY,colours,results,title,xAxis,fileName,x)
+    drawBar(12,8,'r',x5,'Go Variants','Go Variants','goGames.png',lib5_games)
 
-    results = x6
-    x = lib6_games
-    title = 'Gammon Variants'
-    fileName = 'gammonGames.png'
-    xAxis = title
-    drawBar(figX,figY,colours,results,title,xAxis,fileName,x)
+    drawBar(12,8,'r',x6,'Gammon Variants','Gammon Variants','gammonGames.png',lib6_games)
 
 def userGames():
     x = []
@@ -168,7 +139,7 @@ def userGames():
     lastMonth = "null"
     for item in data:
         try:
-            date = item["ca"]["$date"]
+            date = item.get("ca", {}).get("$date", 1)
             date = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
             count += 1
 
@@ -215,7 +186,6 @@ def playerAdvantage():
     loseP1 = 0
     incompleteP1 = 0
 
-    #change name of win1 ect
     winhElo = 0
     drawhElo = 0
     losehElo = 0
@@ -225,7 +195,7 @@ def playerAdvantage():
         drawB = False
         incompleteB = False
         try:
-            status = item['s']
+            status = item.get('s',10)
             if status == 34 or status == 32:
                 drawP1 += 1
                 drawB = True
@@ -233,27 +203,19 @@ def playerAdvantage():
                 incompleteP1 += 1
                 incompleteB = True
             else:
-                try:
-                    wID = item['wid']
-                except:
+                wID = item.get('wid', "")
+                if(wID == ""):
                     incompleteP1 += 1
                     incompleteB = True
-                PlayersID = item['us']
-                p1 = PlayersID[0]
-                if(p1 == wID):
-                    winP1 += 1
                 else:
-                    loseP1 += 1
-            try:
-                p1Elo = item['p0']['e']
-            except:
-                print("no elo value")
-                p1Elo = 1500
-            try:
-                p2Elo = item['p1']['e']
-            except:
-                print("no elo value")
-                p2Elo = 1500
+                    PlayersID = item['us']
+                    p1 = PlayersID[0]
+                    if(p1 == wID):
+                        winP1 += 1
+                    else:
+                        loseP1 += 1
+            p1Elo = item.get('p0', {}).get('e', 1500)
+            p2Elo = item.get('p1', {}).get('e', 1500)
             if(incompleteB == True):
                 incompletehElo += 1
             elif(drawB == True):
@@ -277,21 +239,13 @@ def playerAdvantage():
         except:
             print("invalid data value")
 
-    figX = 12
-    figY = 8
-    colours = ['g','y','r','black']
-    results = [winhElo,drawhElo,losehElo,incompletehElo]
-    x = ["P1 Win","P1 Draw","P1 Loss","incomplete"]
-    xAxis = "Results"
-    title = 'Player one versus Player two peformance'
-    fileName = 'P1VP2.png'
-    drawBar(figX,figY,colours,results,title,xAxis,fileName,x)
 
-    results = [winhElo,drawhElo,losehElo,incompletehElo]
-    x = ["Win","Draw","Loss","incomplete"]
-    title = 'higher Elo peformance against lower Elo '
-    fileName = 'HigherEloPeformance.png'
-    drawBar(figX,figY,colours,results,title,xAxis,fileName,x)
+    colours = ['g','y','r','black']
+    drawBar(12,8,['g','y','r','black'],[winhElo,drawhElo,losehElo,incompletehElo],'Player One versus Player Two peformance',
+            'Results','P1VP2.png',["P1 Win","P1 Draw","P1 Loss","incomplete"])
+
+    drawBar(12,8,colours,[winhElo,drawhElo,losehElo,incompletehElo],'Higher Elo peformance against Lower Elo ',
+            'Results','HigherEloPeformance.png',["Win","Draw","Loss","incomplete"])
 
 def drawBar(figX,figY,colours,results,title,xAxis,fileName,x):
     plt.figure(figsize = (figX,figY))
