@@ -93,6 +93,7 @@ def variantGames():
         try:
             lib = item.get('l',1)
             var = item.get('v',1)
+            elo1 = item.get('e',1500)
             game = GAMES[lib,var]
             match(lib):
                 case 0:
@@ -356,6 +357,7 @@ def p1VSp2All():
             print(f"An error occurred: {e}")
     # plot for lib0
     plt.figure(figsize=(18,8))
+    getProportion(lib0_arr)
     w = [lib0_arr[i][0] for i in range(len(lib0_arr))]
     d = [lib0_arr[i][1] for i in range(len(lib0_arr))]
     l = [lib0_arr[i][2] for i in range(len(lib0_arr))]
@@ -364,10 +366,12 @@ def p1VSp2All():
     plt.ylabel('Results')
     plt.title("Results for P1 VS P2 in lib0 games")
     plt.tight_layout()
+    plt.legend()
     plt.savefig("lib0p1vsp2.png", format='png')
     plt.show()
     # plot for lib1
     plt.figure(figsize=(18,8))
+    getProportion(lib1_arr)
     w = [lib1_arr[i][0] for i in range(len(lib1_arr))]
     d = [lib1_arr[i][1] for i in range(len(lib1_arr))]
     l = [lib1_arr[i][2] for i in range(len(lib1_arr))]
@@ -376,10 +380,12 @@ def p1VSp2All():
     plt.ylabel('Results')
     plt.title("Results for P1 VS P2 in lib1 games")
     plt.tight_layout()
+    plt.legend()
     plt.savefig("lib1p1vsp2.png", format='png')
     plt.show()
     #plot for lib2
     plt.figure(figsize=(14,8))
+    getProportion(lib2_arr)
     w = [lib2_arr[i][0] for i in range(len(lib2_arr))]
     d = [lib2_arr[i][1] for i in range(len(lib2_arr))]
     l = [lib2_arr[i][2] for i in range(len(lib2_arr))]
@@ -388,10 +394,12 @@ def p1VSp2All():
     plt.ylabel('Results')
     plt.title("Results for P1 VS P2 in lib2 games")
     plt.tight_layout()
+    plt.legend()
     plt.savefig("lib2p1vsp2.png", format='png')
     plt.show()
     #plot for lib5
     plt.figure(figsize=(12,8))
+    getProportion(lib5_arr)
     w = [lib5_arr[i][0] for i in range(len(lib5_arr))]
     d = [lib5_arr[i][1] for i in range(len(lib5_arr))]
     l = [lib5_arr[i][2] for i in range(len(lib5_arr))]
@@ -400,10 +408,12 @@ def p1VSp2All():
     plt.ylabel('Results')
     plt.title("Results for P1 VS P2 in lib5 games")
     plt.tight_layout()
+    plt.legend()
     plt.savefig("lib5p1vsp2.png", format='png')
     plt.show()
     #plot for lib6
     plt.figure(figsize=(12,8))
+    getProportion(lib6_arr)
     w = [lib6_arr[i][0] for i in range(len(lib6_arr))]
     d = [lib6_arr[i][1] for i in range(len(lib6_arr))]
     l = [lib6_arr[i][2] for i in range(len(lib6_arr))]
@@ -412,20 +422,215 @@ def p1VSp2All():
     plt.ylabel('Results')
     plt.title("Results for P1 VS P2 in lib6 games")
     plt.tight_layout()
+    plt.legend()
     plt.savefig("lib6p1vsp2.png", format='png')
     plt.show()
 
+def getProportion(lib_arr):
+    for i in range(len(lib_arr)):
+        try:
+            total = 0
+            wins = lib_arr[i][0]
+            draws = lib_arr[i][1]
+            losses = lib_arr[i][2]
+            total = wins+ draws + losses
+            lib_arr[i][0] = wins/total
+            lib_arr[i][1] = draws/total
+            lib_arr[i][2] = losses/total
+        except:
+            print("no games played")
 
 
 def p1VSp2Rated():
     print("hi")
 def p1VSp2Skilled():  
-    print("hi")
-def firstTurnAnalysis():
+    lib0_games =[v for k,v in GAMES.items() if k[0] == 0]
+    lib1_games = [v for k,v in GAMES.items() if k[0] == 1]
+    lib2_games = [v for k,v in GAMES.items() if k[0] == 2 or k[0] == 3 or k[0] == 4]
+    lib5_games = [v for k,v in GAMES.items() if k[0] == 5]
+    lib6_games = [v for k,v in GAMES.items() if k[0] == 6]
 
-    p1VSp2All()
-    p1VSp2Rated()
-    p1VSp2Skilled()
+    lib0_arr = [[0 for i in range(3)] for j in range(len(lib0_games))]
+    lib1_arr = [[0 for i in range(3)] for j in range(len(lib1_games))]
+    lib2_arr = [[0 for i in range(3)] for j in range(len(lib2_games))]
+    lib5_arr = [[0 for i in range(3)] for j in range(len(lib5_games))]
+    lib6_arr = [[0 for i in range(3)] for j in range(len(lib6_games))]
+
+    incompleteGames = 0
+
+    for item in data:
+        try:
+            p1Elo = item.get('p0', {}).get('e', 1500)
+            p2Elo = item.get('p1', {}).get('e', 1500)
+            if(p1Elo > 1500 and p2Elo > 1500):
+                lib = item.get('l',1)
+                var = item.get('v',1)
+                game = GAMES[lib,var]
+                win = False
+                loss = False
+                draw = False
+                status = item.get('s',10)
+                if status == 34 or status == 32:
+                    draw = True
+                elif status == 39 or status == 10 or status == 20 or status == 25 or status == 37:
+                    #Game isn't finished
+                    incompleteGames += 1  
+                else:
+                    wID = item.get('wid', "")
+                    if(wID == ""):
+                        incompleteGames += 1
+                    else:
+                        PlayersID = item['us']
+                        p1 = PlayersID[0]
+                        if(p1 == wID):
+                            win = True
+                        else:
+                            loss = True
+                match(lib):
+                    case 0:
+                        i = lib0_games.index(game)
+                        if(win):
+                            lib0_arr[i][0] += 1
+                        elif(draw):
+                            lib0_arr[i][1] += 1
+                        else:
+                            lib0_arr[i][2] += 1
+                    case 1:
+                        i = lib1_games.index(game)
+                        if(win):
+                            lib1_arr[i][0] += 1
+                        elif(draw):
+                            lib1_arr[i][1] += 1
+                        else:
+                            lib1_arr[i][2] += 1
+                    case 2:
+                        i = lib2_games.index(game)
+                        if(win):
+                            lib2_arr[i][0] += 1
+                        elif(draw):
+                            lib2_arr[i][1] += 1
+                        else:
+                            lib2_arr[i][2] += 1
+                    case 3:
+                        i = lib2_games.index(game)
+                        if(win):
+                            lib2_arr[i][0] += 1
+                        elif(draw):
+                            lib2_arr[i][1] += 1
+                        else:
+                            lib2_arr[i][2] += 1
+                    case 4:
+                        i = lib2_games.index(game)
+                        if(win):
+                            lib2_arr[i][0] += 1
+                        elif(draw):
+                            lib2_arr[i][1] += 1
+                        else:
+                            lib2_arr[i][2] += 1
+                    case 5:
+                        i = lib5_games.index(game)
+                        if(win):
+                            lib5_arr[i][0] += 1
+                        elif(draw):
+                            lib5_arr[i][1] += 1
+                        else:
+                            lib5_arr[i][2] += 1
+                    case 6:
+                        i = lib6_games.index(game)
+                        if(win):
+                            lib6_arr[i][0] += 1
+                        elif(draw):
+                            lib6_arr[i][1] += 1
+                        else:
+                            lib6_arr[i][2] += 1
+                    case _:
+                        print("invalid value")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+    # plot for lib0
+    plt.figure(figsize=(18,8))
+    getProportion(lib0_arr)
+    w = [lib0_arr[i][0] for i in range(len(lib0_arr))]
+    d = [lib0_arr[i][1] for i in range(len(lib0_arr))]
+    l = [lib0_arr[i][2] for i in range(len(lib0_arr))]
+    plotStackedBar(lib0_games,w,d,l)
+    plt.xlabel('Games')
+    plt.ylabel('Results')
+    plt.title("Results for P1 VS P2 in lib0 games")
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig("lib0p1vsp2skilled.png", format='png')
+    plt.show()
+    # plot for lib1
+    plt.figure(figsize=(18,8))
+    getProportion(lib1_arr)
+    w = [lib1_arr[i][0] for i in range(len(lib1_arr))]
+    d = [lib1_arr[i][1] for i in range(len(lib1_arr))]
+    l = [lib1_arr[i][2] for i in range(len(lib1_arr))]
+    plotStackedBar(lib1_games,w,d,l)
+    plt.xlabel('Games')
+    plt.ylabel('Results')
+    plt.title("Results for P1 VS P2 in lib1 games")
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig("lib1p1vsp2skilled.png", format='png')
+    plt.show()
+    #plot for lib2
+    plt.figure(figsize=(14,8))
+    getProportion(lib2_arr)
+    w = [lib2_arr[i][0] for i in range(len(lib2_arr))]
+    d = [lib2_arr[i][1] for i in range(len(lib2_arr))]
+    l = [lib2_arr[i][2] for i in range(len(lib2_arr))]
+    plotStackedBar(lib2_games,w,d,l)
+    plt.xlabel('Games')
+    plt.ylabel('Results')
+    plt.title("Results for P1 VS P2 in lib2 games")
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig("lib2p1vsp2skilled.png", format='png')
+    plt.show()
+    #plot for lib5
+    plt.figure(figsize=(12,8))
+    getProportion(lib5_arr)
+    w = [lib5_arr[i][0] for i in range(len(lib5_arr))]
+    d = [lib5_arr[i][1] for i in range(len(lib5_arr))]
+    l = [lib5_arr[i][2] for i in range(len(lib5_arr))]
+    plotStackedBar(lib5_games,w,d,l)
+    plt.xlabel('Games')
+    plt.ylabel('Results')
+    plt.title("Results for P1 VS P2 in lib5 games")
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig("lib5p1vsp2skilled.png", format='png')
+    plt.show()
+    #plot for lib6
+    plt.figure(figsize=(12,8))
+    getProportion(lib6_arr)
+    w = [lib6_arr[i][0] for i in range(len(lib6_arr))]
+    d = [lib6_arr[i][1] for i in range(len(lib6_arr))]
+    l = [lib6_arr[i][2] for i in range(len(lib6_arr))]
+    plotStackedBar(lib6_games,w,d,l)
+    plt.xlabel('Games')
+    plt.ylabel('Results')
+    plt.title("Results for P1 VS P2 in lib6 games")
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig("lib6p1vsp2skilled.png", format='png')
+    plt.show()
+
+def firstTurnAnalysis():
+    print("enter 1 for all games")
+    print("enter 2 for large rating difference games")
+    print("enter 3 for skilled games over 1500")
+    option = int(input("enter choice "))
+    if option == 1:
+        p1VSp2All()
+    elif option == 2:
+        p1VSp2Rated()
+    elif option ==3:
+        p1VSp2Skilled()
+    else:
+        print("not an option")
 
 def drawBar(figX,figY,colours,results,title,xAxis,fileName,x):
     plt.figure(figsize = (figX,figY))
