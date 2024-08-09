@@ -79,6 +79,7 @@ GAMES = {
 }
 
 def variantGames():
+    counter1 = 0
     lib0_games =[v for k,v in GAMES.items() if k[0] == 0]
     lib1_games = [v for k,v in GAMES.items() if k[0] == 1]
     lib2_games = [v for k,v in GAMES.items() if k[0] == 2 or k[0] == 3 or k[0] == 4]
@@ -119,8 +120,11 @@ def variantGames():
                     x6[i] += 1
                 case _:
                     print("invalid value")
-        except:
-            print("error in data")
+        except Exception as e:
+            counter1 += 1
+            print(f"An error occurred: {e}")
+
+    print('number of invalid rows is: {0}'.format(counter1))
 
     drawBar(16,8,'r',x0,'Chess Variants','Chess Variants','chessGames.png',lib0_games)
 
@@ -135,6 +139,7 @@ def variantGames():
 def userGames():
     x = []
     y = []
+    counter1 = 0
     count = 0
     dates = len(data)
     lastMonth = "null"
@@ -155,10 +160,12 @@ def userGames():
             lastDate = date_time_num
 
         except:
-            print("invalid data value")
+            counter1 += 1
+            #print("invalid data value")
 
-    y.append(lastDate)
-    x.append(count)
+    # y.append(lastDate)
+    # x.append(count)
+    print('number of invalid rows is: {0}'.format(counter1))
 
     x0 = np.array(x)
     y0 = np.array(y)
@@ -182,6 +189,8 @@ def userGames():
     plt.show()
 
 def playerAdvantage():
+    counter1 = 0
+
     winP1 = 0
     drawP1 = 0
     loseP1 = 0
@@ -200,7 +209,7 @@ def playerAdvantage():
             if status == 34 or status == 32:
                 drawP1 += 1
                 drawB = True
-            elif status == 39 or status == 10 or status == 20 or status == 25 or status == 37:
+            elif status == 38 or status < 30 or status == 37:
                 incompleteP1 += 1
                 incompleteB = True
             else:
@@ -217,30 +226,26 @@ def playerAdvantage():
                         loseP1 += 1
             p1Elo = item.get('p0', {}).get('e', 1500)
             p2Elo = item.get('p1', {}).get('e', 1500)
-            if(incompleteB == True):
+            if(incompleteB):
                 incompletehElo += 1
-            elif(drawB == True):
+            elif(drawB):
                 drawhElo += 1
-            elif(p1Elo > p2Elo):
-                higherElo = "player1"
-            elif(p1Elo < p2Elo):
-                higherElo = "player2"
             else:
-                higherElo = "equal"
-            if(p1 == wID and higherElo == "player1"):
-                winhElo += 1
-            elif(p1 != wID and higherElo == "player2"):
-                winhElo += 1
-            elif(higherElo == "equal"):
-                higherElo = "equal"
-                #no action as equal elo
-            else:
-                losehElo += 1
+                if(p1 == wID and p1Elo > p2Elo):
+                    winhElo += 1
+                elif(p1 != wID and p1Elo < p2Elo):
+                    winhElo += 1
+                elif(p1Elo == p2Elo):
+                    higherElo = "equal"
+                    #no action as equal elo
+                else:
+                    losehElo += 1
             
         except:
-            print("invalid data value")
+            counter1 += 1
+            #print("invalid data value")
 
-
+    print('number of invalid rows is: {0}'.format(counter1))
     colours = ['g','y','r','black']
     drawBar(12,8,['g','y','r','black'],[winhElo,drawhElo,losehElo,incompletehElo],'Player One versus Player Two peformance',
             'Results','P1VP2.png',["P1 Win","P1 Draw","P1 Loss","incomplete"])
@@ -254,7 +259,7 @@ def plotStackedBar(lib_games,w,d,l):
     plt.bar(lib_games,l, bottom=[i + j for i, j in zip(w, d)], color='r', width=0.5, label='Losses')
 
 def p1VSp2All():
-
+    counter1 = 0
     lib0_games =[v for k,v in GAMES.items() if k[0] == 0]
     lib1_games = [v for k,v in GAMES.items() if k[0] == 1]
     lib2_games = [v for k,v in GAMES.items() if k[0] == 2 or k[0] == 3 or k[0] == 4]
@@ -280,7 +285,7 @@ def p1VSp2All():
             status = item.get('s',10)
             if status == 34 or status == 32:
                 draw = True
-            elif status == 39 or status == 10 or status == 20 or status == 25 or status == 37:
+            elif status == 38 or status < 30 or status == 37:
                 #Game isn't finished
                 incompleteGames += 1  
             else:
@@ -354,8 +359,10 @@ def p1VSp2All():
                 case _:
                     print("invalid value")
         except Exception as e:
-            print(f"An error occurred: {e}")
+            counter1 += 1
+            #print(f"An error occurred: {e}")
     # plot for lib0
+    print('number of invalid rows is: {0}'.format(counter1))
     plt.figure(figsize=(18,8))
     getProportion(lib0_arr)
     w = [lib0_arr[i][0] for i in range(len(lib0_arr))]
@@ -457,7 +464,7 @@ def p1VSp2Skilled():
     lib6_arr = [[0 for i in range(3)] for j in range(len(lib6_games))]
 
     incompleteGames = 0
-
+    counter1 = 0
     for item in data:
         try:
             p1Elo = item.get('p0', {}).get('e', 1500)
@@ -472,7 +479,7 @@ def p1VSp2Skilled():
                 status = item.get('s',10)
                 if status == 34 or status == 32:
                     draw = True
-                elif status == 39 or status == 10 or status == 20 or status == 25 or status == 37:
+                elif status == 38 or status < 30 or status == 37:
                     #Game isn't finished
                     incompleteGames += 1  
                 else:
@@ -546,8 +553,12 @@ def p1VSp2Skilled():
                     case _:
                         print("invalid value")
         except Exception as e:
-            print(f"An error occurred: {e}")
+            counter1 += 1
+           # print(f"An error occurred: {e}")
+
     # plot for lib0
+
+    print('number of invalid rows is: {0}'.format(counter1))
     plt.figure(figsize=(18,8))
     getProportion(lib0_arr)
     w = [lib0_arr[i][0] for i in range(len(lib0_arr))]
@@ -561,7 +572,9 @@ def p1VSp2Skilled():
     plt.legend()
     plt.savefig("lib0p1vsp2skilled.png", format='png')
     plt.show()
+
     # plot for lib1
+
     plt.figure(figsize=(18,8))
     getProportion(lib1_arr)
     w = [lib1_arr[i][0] for i in range(len(lib1_arr))]
@@ -575,7 +588,9 @@ def p1VSp2Skilled():
     plt.legend()
     plt.savefig("lib1p1vsp2skilled.png", format='png')
     plt.show()
+
     #plot for lib2
+
     plt.figure(figsize=(14,8))
     getProportion(lib2_arr)
     w = [lib2_arr[i][0] for i in range(len(lib2_arr))]
@@ -589,7 +604,9 @@ def p1VSp2Skilled():
     plt.legend()
     plt.savefig("lib2p1vsp2skilled.png", format='png')
     plt.show()
+
     #plot for lib5
+
     plt.figure(figsize=(12,8))
     getProportion(lib5_arr)
     w = [lib5_arr[i][0] for i in range(len(lib5_arr))]
@@ -603,7 +620,9 @@ def p1VSp2Skilled():
     plt.legend()
     plt.savefig("lib5p1vsp2skilled.png", format='png')
     plt.show()
+
     #plot for lib6
+
     plt.figure(figsize=(12,8))
     getProportion(lib6_arr)
     w = [lib6_arr[i][0] for i in range(len(lib6_arr))]
@@ -648,6 +667,7 @@ def options(choice):
         variantGames()
         userGames()
         playerAdvantage()
+        firstTurnAnalysis()
     elif choice == "games_variety":
         variantGames()
     elif choice == "user_games":
@@ -662,7 +682,7 @@ def options(choice):
 if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) == 1:
-        with open('games_dev_2024_08_01.json', 'r') as file:
+        with open('games_live_2024_08_01.json', 'r') as file:
             data = json.load(file)
             options(args[0])
 
