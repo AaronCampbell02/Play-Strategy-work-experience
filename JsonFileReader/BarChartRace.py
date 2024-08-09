@@ -51,9 +51,7 @@ GAMES = {
 
 
 def variantGames():
-    outputData = {
-
-    }
+    outputData = []
     all_arr = []
     dates = []
     lib_games =[v for k,v in GAMES.items()]
@@ -71,7 +69,6 @@ def variantGames():
                 i = lib_games.index(game)
                 date = item.get("ca", {}).get("$date", 1)
                 date = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%fZ')
-                print(i,j)
                 all_arr[i][j] += 1
 
                 if (lastMonth != "null" and lastMonth != date.month):
@@ -79,12 +76,13 @@ def variantGames():
                     lastMonth = str(date.strftime('%b'))
                     string = lastMonth + " " + lastYear
                     dic = {
+                        "Dates": string
                     }
                     for k in range(len(lib_games)):
                         name = lib_games[k]
                         count = all_arr[k][j]
                         dic[name] = count
-                    outputData[string] = dic
+                    outputData.append(dic) 
                     j += 1
                     for i in range(len(all_arr)):
                         all_arr[i].append(0)
@@ -98,11 +96,7 @@ def variantGames():
     lastYear = str(date.strftime('%Y'))
     lastMonth = str(date.strftime('%b'))
     string = lastMonth + " " + lastYear
-    dates.append(string)
-
-    print((dates))
-
-    
+    dates.append(string) 
 
     with open('output_data.json', 'w') as json_file:
         json.dump(outputData, json_file, indent=4)
@@ -112,6 +106,6 @@ def variantGames():
 if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) == 1:
-        with open('games_dev_2024_08_01.json', 'r') as file:
+        with open('games_live_2024_08_01.json', 'r') as file:
             data = json.load(file)
             variantGames()
