@@ -82,10 +82,11 @@ def variantGames():
                         name = lib_games[k]
                         count = all_arr[k][j]
                         dic[name] = count
-                    outputData.append(dic) 
-                    j += 1
+                    outputData.append(dic)
                     for i in range(len(all_arr)):
-                        all_arr[i].append(0)
+                        all_arr[i].append(all_arr[i][j]) 
+                    j += 1
+
  
                 lastMonth = date.month
                 lastYear = date.year
