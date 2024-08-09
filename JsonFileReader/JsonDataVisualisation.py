@@ -186,7 +186,7 @@ def userGames():
     plt.legend()
     plt.tight_layout()
     plt.savefig('gamesTrends.png', format='png')
-    plt.show()
+    #plt.show()
 
 def playerAdvantage():
     counter1 = 0
@@ -375,7 +375,7 @@ def p1VSp2All():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib0p1vsp2.png", format='png')
-    plt.show()
+    #plt.show()
     # plot for lib1
     plt.figure(figsize=(18,8))
     getProportion(lib1_arr)
@@ -389,7 +389,7 @@ def p1VSp2All():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib1p1vsp2.png", format='png')
-    plt.show()
+    #plt.show()
     #plot for lib2
     plt.figure(figsize=(14,8))
     getProportion(lib2_arr)
@@ -403,7 +403,7 @@ def p1VSp2All():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib2p1vsp2.png", format='png')
-    plt.show()
+    #plt.show()
     #plot for lib5
     plt.figure(figsize=(12,8))
     getProportion(lib5_arr)
@@ -417,7 +417,7 @@ def p1VSp2All():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib5p1vsp2.png", format='png')
-    plt.show()
+    #plt.show()
     #plot for lib6
     plt.figure(figsize=(12,8))
     getProportion(lib6_arr)
@@ -431,7 +431,7 @@ def p1VSp2All():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib6p1vsp2.png", format='png')
-    plt.show()
+    #plt.show()
 
 def getProportion(lib_arr):
     for i in range(len(lib_arr)):
@@ -448,7 +448,7 @@ def getProportion(lib_arr):
             print("no games played")
 
 
-def p1VSp2Rated():
+
     print("hi")
 def p1VSp2Skilled():  
     lib0_games =[v for k,v in GAMES.items() if k[0] == 0]
@@ -571,7 +571,7 @@ def p1VSp2Skilled():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib0p1vsp2skilled.png", format='png')
-    plt.show()
+    #plt.show()
 
     # plot for lib1
 
@@ -587,7 +587,7 @@ def p1VSp2Skilled():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib1p1vsp2skilled.png", format='png')
-    plt.show()
+    #plt.show()
 
     #plot for lib2
 
@@ -603,7 +603,7 @@ def p1VSp2Skilled():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib2p1vsp2skilled.png", format='png')
-    plt.show()
+    #plt.show()
 
     #plot for lib5
 
@@ -619,7 +619,7 @@ def p1VSp2Skilled():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib5p1vsp2skilled.png", format='png')
-    plt.show()
+    #plt.show()
 
     #plot for lib6
 
@@ -635,18 +635,15 @@ def p1VSp2Skilled():
     plt.tight_layout()
     plt.legend()
     plt.savefig("lib6p1vsp2skilled.png", format='png')
-    plt.show()
+    #plt.show()
 
 def firstTurnAnalysis():
     print("enter 1 for all games")
-    print("enter 2 for large rating difference games")
-    print("enter 3 for skilled games over 1500")
+    print("enter 2 for skilled games over 1500")
     option = int(input("enter choice "))
     if option == 1:
         p1VSp2All()
-    elif option == 2:
-        p1VSp2Rated()
-    elif option ==3:
+    elif option ==2:
         p1VSp2Skilled()
     else:
         print("not an option")
@@ -659,7 +656,7 @@ def drawBar(figX,figY,colours,results,title,xAxis,fileName,x):
     plt.title(title)
     plt.tight_layout()
     plt.savefig(fileName, format='png')
-    plt.show()
+    #plt.show()
 
 def options(choice):
     choice = choice.lower()

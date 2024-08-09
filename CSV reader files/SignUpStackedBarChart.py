@@ -72,6 +72,6 @@ plt.legend()
 plt.tight_layout()
 
 plt.savefig('SignUpStackedBar.png', format='png')
-plt.show() 
+#plt.show() 
 
     
