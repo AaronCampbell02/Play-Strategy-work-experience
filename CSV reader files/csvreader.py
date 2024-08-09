@@ -46,6 +46,6 @@ plt.legend()
 plt.tight_layout()
 
 plt.savefig('games_per_month.png', format='png')
-plt.show() 
+#plt.show() 
 
     

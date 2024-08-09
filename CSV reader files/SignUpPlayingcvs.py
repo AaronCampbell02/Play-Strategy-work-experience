@@ -70,6 +70,6 @@ plt.legend()
 plt.tight_layout()
 
 plt.savefig('sign_ups_proportion.png', format='png')
-plt.show() 
+#plt.show() 
 
     

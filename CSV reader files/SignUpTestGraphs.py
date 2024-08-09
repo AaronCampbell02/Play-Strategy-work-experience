@@ -72,4 +72,4 @@ plt.legend()
 plt.tight_layout()
 
 plt.savefig('SignUpTestGraphs.png', format='png')
-plt.show()
+#plt.show()

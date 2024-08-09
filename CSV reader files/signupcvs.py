@@ -72,6 +72,6 @@ plt.legend()
 plt.tight_layout()
 
 plt.savefig('sign_ups_per_month.png', format='png')
-plt.show() 
+#plt.show() 
 
     

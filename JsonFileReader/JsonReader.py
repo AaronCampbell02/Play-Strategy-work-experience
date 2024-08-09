@@ -47,8 +47,8 @@ with open('games_dev_2024_08_01.json', 'r') as file:
         except:
             print("Invalid data entry")
 
-names = [status_array[0][0],status_array[1][0],status_array[2][0],status_array[3][0],status_array[4][0],status_array[5][0],status_array[6][0]]
-values = [x[0],x[1],x[2],x[3],x[4],x[5],x[6]]
+names = [status_array[i][0] for i in range(7)]
+values = [x[i] for i in range(7)]
 plt.figure(figsize=(12, 8))
 plt.bar(names, values, color = 'g', width = 0.5, label = "Ways to end the game")
 plt.xlabel('Endings')
@@ -56,10 +56,6 @@ plt.ylabel('Count')
 plt.title('Ending Counts')
 plt.grid(axis='x', linestyle='--', alpha=0.7)
 plt.tight_layout()
-
-for i in range(len(status_array)):
-    print(x[i])
-
 plt.savefig('Game_Endings.png', format='png')
-plt.show()
+#plt.show()
 
