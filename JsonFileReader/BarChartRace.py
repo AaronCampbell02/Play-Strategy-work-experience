@@ -109,6 +109,6 @@ def variantGames():
 if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) == 1:
-        with open('games_dev_2024_08_01.json', 'r') as file:
+        with open('games_live_2024_08_01.json', 'r') as file:
             data = json.load(file)
             variantGames()
